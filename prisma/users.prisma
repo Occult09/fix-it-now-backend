@@ -1,0 +1,21 @@
+model User {
+    id       String @id @default(uuid())
+    name     String @db.VarChar(255)
+    email    String @unique
+    password String
+    phone String?
+    role Role @default(CUSTOMER)
+    address String?
+    profileImage String?
+    isBlocked Boolean @default(false)
+
+    technicialProfile TechnicianProfile?
+    reviews Review[]
+
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+
+    @@map("users")
+}   

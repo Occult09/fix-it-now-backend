@@ -1,0 +1,17 @@
+model TechnicianProfile {
+    id String @id @default(uuid())
+    userId String @unique
+    bio String?
+    experience Int
+    hourlyRate Decimal @db.Decimal(10,2)
+    isAvaiable Boolean @default(true)
+
+    user User @relation(fields: [userId], references: [id])
+
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+
+    @@map("technicianProfiles")
+}

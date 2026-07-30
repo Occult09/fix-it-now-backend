@@ -1,0 +1,15 @@
+model Booking {
+    id String @id @default(uuid())
+    bookingDate DateTime
+    bookingTime String
+    totalPrice Decimal @db.Decimal(10,2)
+    status BookingStatus @default(REQUESTED)
+
+    review Review?
+
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("bookings")
+}
