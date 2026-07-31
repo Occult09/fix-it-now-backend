@@ -8,6 +8,10 @@ model TechnicianProfile {
 
     user User @relation(fields: [userId], references: [id])
 
+    service Service[]
+    booking Booking[]
+    review Review[]
+
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

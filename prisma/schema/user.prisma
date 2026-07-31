@@ -11,6 +11,7 @@ model User {
 
     technicialProfile TechnicianProfile?
     reviews Review[]
+    booking Booking[]
 
 
     createdAt DateTime @default(now())

@@ -9,6 +9,9 @@ model Review {
     bookingId String
     booking Booking @relation(fields: [bookingId], references: [id])
 
+    technicianId String
+    technician TechnicianProfile @relation(fields: [technicianId], references: [id])
+
     createdAt DateTime @default(now())
 
     @@map("reviews")
