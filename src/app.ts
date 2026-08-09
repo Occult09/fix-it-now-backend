@@ -1,5 +1,5 @@
 import cookieParser from "cookie-parser";
-import express, { Application, Request, Response } from "express";
+import express, { Application } from "express";
 import cors from "cors";
 import { authRoutes } from "./modules/auth/auth.route";
 
