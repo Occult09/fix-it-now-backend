@@ -7,4 +7,10 @@ model User {
     role         Role         @default(CUSTOMER)
     isCreated    DateTime     @default(now())
     updatedAt    DateTime     @updatedAt
+
+    technicianProfile TechnicianProfile?
+    booking Booking[]
+    review Review[]
+
+    @@map("users")
 }
