@@ -3,6 +3,8 @@ import { catchAsync } from "../../utils/catchAsync";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import httpStatus from "http-status";
+import { verifyToken } from "../../utils/jwt";
+import config from "../../config";
 
 const registerUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
@@ -22,7 +24,7 @@ const registerUser = catchAsync(async (req: Request, res: Response, next: NextFu
 const loginUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
 
-    const {accessToken, refreshToken} = await authService.loginUser(payload);
+    const { accessToken, refreshToken } = await authService.loginUser(payload);
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -47,9 +49,30 @@ const loginUser = catchAsync(async (req: Request, res: Response, next: NextFunct
             refreshToken
         }
     })
+});
+
+const getMyProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { accessToken } = req.cookies;
+    const verifiedToken = verifyToken(accessToken, config.jwt_access_secret as string);
+
+    if(typeof verifiedToken === "string"){
+        throw new Error("Invalid Token")
+    }
+
+    const result = await authService.getMyProfile(verifiedToken.id);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "My Profile Retrieved Successfully!",
+        data: {
+            result
+        }
+    })
 })
 
 export const authController = {
     registerUser,
-    loginUser
+    loginUser,
+    getMyProfile
 }

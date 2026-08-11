@@ -6,3 +6,13 @@ export const createToken = (jwtPaylaod: JwtPayload, secret: string, expiresIn: S
 
     return token;
 }
+
+export const verifyToken = (token: string, secret: string) => {
+    const verifiedToken = jwt.verify(token, secret);
+
+    if (!verifiedToken) {
+        throw new Error("Invalid Token");
+    }
+
+    return verifiedToken;
+}

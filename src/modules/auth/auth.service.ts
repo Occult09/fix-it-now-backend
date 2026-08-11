@@ -67,10 +67,24 @@ const loginUser = async (payload: ILogin) => {
     const refreshToken = createToken(jwtPayload, config.jwt_refresh_secret as string, config.jwt_refresh_expires_in as SignOptions);
 
     return { accessToken, refreshToken }
+};
+
+const getMyProfile = async (id: string) => {
+    const profile = await prisma.user.findUniqueOrThrow({
+        where: {
+            id: id
+        },
+        omit: {
+            password: true
+        }
+    });
+
+    return profile;
 }
 
 
 export const authService = {
     registerUserIntoDB,
-    loginUser
+    loginUser,
+    getMyProfile
 }
