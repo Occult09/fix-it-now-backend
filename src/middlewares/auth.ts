@@ -14,7 +14,7 @@ export const auth = (...requiredRoles: Role[]) => {
             throw new Error("You are not authorized to access this route! Please Login First");
         }
 
-        const verifiedToken = verifyToken(token, config.jwt_refresh_secret as string);
+        const verifiedToken = verifyToken(token, config.jwt_access_secret as string);
 
         if (!verifiedToken) {
             throw new Error("Invalid Token!")
