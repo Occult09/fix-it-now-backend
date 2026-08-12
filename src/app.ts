@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express, { Application } from "express";
 import cors from "cors";
 import { authRoutes } from "./modules/auth/auth.route";
+import { serviceRoutes } from "./modules/service/service.route";
 
 const app: Application = express()
 
@@ -17,5 +18,6 @@ app.use(express.urlencoded({
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/services", serviceRoutes);
 
 export default app;
