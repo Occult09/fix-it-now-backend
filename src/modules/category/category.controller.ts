@@ -19,7 +19,37 @@ const createCategory = catchAsync(async (req: Request, res: Response, next: Next
     })
 })
 
+const getCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const result = await categoryService.getCategoryFromDB();
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "All categories retrieved successfully!",
+        data: {
+            result
+        }
+    })
+})
+
+const getSingleCategory = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const { categoryId } = req.params;
+
+    const result = await categoryService.getSingleCategoryFromDB(categoryId as string);
+
+    sendResponse(res,{
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Category retrieved successfully!",
+        data: {
+            result
+        }
+    })
+})
+
 
 export const categoryController = {
-    createCategory
+    createCategory,
+    getCategory,
+    getSingleCategory
 }

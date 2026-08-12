@@ -23,7 +23,29 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
     return createdCategory;
 }
 
+const getCategoryFromDB = async () => {
+    const categories = await prisma.category.findMany()
+
+    if(!categories){
+        throw new Error("No category found!")
+    }
+
+    return categories;
+}
+
+const getSingleCategoryFromDB = async(categoryId: string) => {
+    const category = await prisma.category.findUniqueOrThrow({
+        where: {
+            id: categoryId
+        }
+    })
+
+    return category;
+}
+
 
 export const categoryService = {
-    createCategoryIntoDB
+    createCategoryIntoDB,
+    getCategoryFromDB,
+    getSingleCategoryFromDB
 }
