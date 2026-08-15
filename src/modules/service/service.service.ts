@@ -1,12 +1,12 @@
 import { prisma } from "../../lib/prisma";
 import { ICreateService } from "./service.interface"
 
-const createServiceIntoDB = async (payload: ICreateService, technicianId: string) => {
+const createServiceIntoDB = async (payload: ICreateService, userId: string) => {
     const { categoryId, title, description, price } = payload;
 
-    await prisma.user.findUniqueOrThrow({
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
         where: {
-            id: technicianId
+            userId
         }
     })
 
@@ -15,6 +15,8 @@ const createServiceIntoDB = async (payload: ICreateService, technicianId: string
             id: categoryId
         }
     })
+
+    const technicianId = technician.id;
 
     const service = await prisma.service.create({
         data: {
@@ -26,9 +28,13 @@ const createServiceIntoDB = async (payload: ICreateService, technicianId: string
         },
         include: {
             category: true,
-            user:{
-                omit: {
-                    password: true
+            technician: {
+                include: {
+                    user: {
+                        omit: {
+                            password: true
+                        }
+                    }
                 }
             }
         }
@@ -37,7 +43,44 @@ const createServiceIntoDB = async (payload: ICreateService, technicianId: string
     return service;
 }
 
+const getAllServiceFromDB = async () => {
+    const services = await prisma.service.findMany({
+        include: {
+            technician: true
+        }
+    })
+
+    if (!services) {
+        throw new Error("No services found")
+    }
+
+    return services
+}
+
+const getSingleServiceFromDB = async (serviceId: string) => {
+    const service = await prisma.service.findUniqueOrThrow({
+        where: {
+            id: serviceId
+        },
+        include: {
+            technician: {
+                include: {
+                    user: {
+                        omit: {
+                            password: true
+                        }
+                    }
+                }
+            }
+        }
+    })
+
+    return service
+}
+
 
 export const serviceService = {
-    createServiceIntoDB
+    createServiceIntoDB,
+    getAllServiceFromDB,
+    getSingleServiceFromDB
 }

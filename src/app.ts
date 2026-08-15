@@ -6,6 +6,8 @@ import { serviceRoutes } from "./modules/service/service.route";
 import { categoryRoutes } from "./modules/category/category.route";
 import { technicianRoutes } from "./modules/technician/technician.route";
 import { technicianPublicRoutes } from "./modules/technician/technician.public.route";
+import { categoryPublicRoutes } from "./modules/category/category.public.route";
+import { bookingRoutes } from "./modules/booking/booking.route";
 
 const app: Application = express()
 
@@ -22,8 +24,10 @@ app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/categories", categoryRoutes);
+app.use("/api/categories", categoryPublicRoutes);
 app.use("/api/technician", technicianRoutes);
 app.use("/api/technicians", technicianPublicRoutes);
 app.use("/api/services", serviceRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 export default app;
