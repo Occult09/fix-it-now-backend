@@ -7,5 +7,7 @@ const router = Router()
 
 router.post("/", auth(Role.TECHNICIAN), technicianController.createTechnicianProfile);
 router.put("/profile", auth(Role.TECHNICIAN), technicianController.updateTechnicianProfile);
+router.put("/availability", auth(Role.TECHNICIAN), technicianController.updateTechnicianAvailability);
+
 
 export const technicianRoutes = router;

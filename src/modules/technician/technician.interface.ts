@@ -10,3 +10,7 @@ export interface IUpdateTechnicianProfile {
     experience?: number;
     hourlyRate?: number;
 }
+
+export interface IUpdateTechnicianAvailability {
+    isAvailable: boolean
+}

@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma"
-import { ICreateTechnicianProfile, IUpdateTechnicianProfile } from "./technician.interface";
+import { ICreateTechnicianProfile, IUpdateTechnicianAvailability, IUpdateTechnicianProfile } from "./technician.interface";
 
 const createTechnicianProfileIntoDB = async (payload: ICreateTechnicianProfile, userId: string) => {
     const { bio, experience, isAvailable, hourlyRate } = payload;
@@ -73,7 +73,73 @@ const updateTechnicianProfileIntoDB = async (payload: IUpdateTechnicianProfile, 
     return updatedTechnician;
 }
 
+const updateTechnicianAvailabilityIntoDB = async (payload: IUpdateTechnicianAvailability, userId: string) => {
+    const { isAvailable } = payload
+
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const updatedTechnician = await prisma.technicianProfile.update({
+        where: {
+            userId
+        },
+        data: {
+            isAvailable
+        },
+        include: {
+            user: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+
+    return updatedTechnician;
+}
+
+const getAllTechniciansFromDB = async () => {
+    const technicians = await prisma.technicianProfile.findMany({
+        include: {
+            user: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    });
+
+    if (!technicians) {
+        throw new Error("No technicians found");
+    }
+
+    return technicians;
+}
+
+const getSingleTechnicianFromDB = async (technicianId: string) => {
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            id: technicianId
+        },
+        include: {
+            user: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+
+    return technician;
+}
+
 export const technicianService = {
     createTechnicianProfileIntoDB,
-    updateTechnicianProfileIntoDB
+    updateTechnicianProfileIntoDB,
+    updateTechnicianAvailabilityIntoDB,
+    getAllTechniciansFromDB,
+    getSingleTechnicianFromDB
 }
