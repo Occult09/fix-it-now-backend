@@ -6,5 +6,6 @@ import { technicianController } from "./technician.controller";
 const router = Router()
 
 router.post("/", auth(Role.TECHNICIAN), technicianController.createTechnicianProfile);
+router.put("/profile", auth(Role.TECHNICIAN), technicianController.updateTechnicianProfile);
 
 export const technicianRoutes = router;

@@ -1,18 +1,18 @@
 enum ActiveStatus {
-    ACTIVE
-    BLOCKED
+  ACTIVE
+  BLOCKED
 }
 
 enum Role {
-    CUSTOMER
-    TECHNICIAN
-    ADMIN
+  CUSTOMER
+  TECHNICIAN
+  ADMIN
 }
 
 enum BookingStatus {
-    REQUESTED
-    ACCEPTED
-    DECLINED
-    IN_PROGRESS
-    COMPLETED
+  REQUESTED
+  ACCEPTED
+  DECLINED
+  IN_PROGRESS
+  COMPLETED
 }

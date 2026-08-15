@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma"
-import { ICreateTechnicianProfile } from "./technician.interface";
+import { ICreateTechnicianProfile, IUpdateTechnicianProfile } from "./technician.interface";
 
 const createTechnicianProfileIntoDB = async (payload: ICreateTechnicianProfile, userId: string) => {
     const { bio, experience, isAvailable, hourlyRate } = payload;
@@ -35,7 +35,7 @@ const createTechnicianProfileIntoDB = async (payload: ICreateTechnicianProfile, 
             user: {
                 select: {
                     name: true,
-                    email : true,
+                    email: true,
                     role: true
                 }
             }
@@ -44,6 +44,36 @@ const createTechnicianProfileIntoDB = async (payload: ICreateTechnicianProfile, 
     return profile;
 }
 
+const updateTechnicianProfileIntoDB = async (payload: IUpdateTechnicianProfile, userId: string) => {
+    const { bio, experience, hourlyRate } = payload;
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const updatedTechnician = await prisma.technicianProfile.update({
+        where: {
+            userId
+        },
+        data: {
+            bio,
+            experience,
+            hourlyRate
+        },
+        include: {
+            user: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+
+    return updatedTechnician;
+}
+
 export const technicianService = {
-    createTechnicianProfileIntoDB
+    createTechnicianProfileIntoDB,
+    updateTechnicianProfileIntoDB
 }

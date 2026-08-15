@@ -20,7 +20,24 @@ const createTechnicianProfile = catchAsync(async (req: Request, res: Response, n
     })
 })
 
+const updateTechnicianProfile = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const userId = req.user.id;
+
+    const result = await technicianService.updateTechnicianProfileIntoDB(payload, userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Technician Profile Updated Successfully!",
+        data: {
+            result
+        }
+    })
+})
+
 
 export const technicianController = {
-    createTechnicianProfile
+    createTechnicianProfile,
+    updateTechnicianProfile
 }
