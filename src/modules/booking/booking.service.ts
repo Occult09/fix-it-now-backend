@@ -44,10 +44,39 @@ const createBookingIntoDB = async (payload: ICreateBooking, customerId: string) 
 }
 
 const getCustomerBookingFromDB = async (customerId: string) => {
+    const customerBookings = await prisma.booking.findMany({
+        where: {
+            customerId
+        },
+        include: {
+            service: true,
+            technician: true
+        }
+    })
 
+    if (!customerBookings) {
+        throw new Error("No booking found!")
+    }
+
+    return customerBookings;
+}
+
+const getSingleCustomerBookingFromDB = async (bookingId: string) => {
+    const booking = await prisma.booking.findUniqueOrThrow({
+        where: {
+            id: bookingId
+        },
+        include: {
+            service: true,
+            technician: true
+        }
+    })
+
+    return booking;
 }
 
 export const bookingService = {
     createBookingIntoDB,
-    getCustomerBookingFromDB
+    getCustomerBookingFromDB,
+    getSingleCustomerBookingFromDB
 }

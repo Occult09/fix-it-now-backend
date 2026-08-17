@@ -6,6 +6,7 @@ import { bookingController } from "./booking.controller";
 const router = Router()
 
 router.post("/", auth(Role.CUSTOMER), bookingController.createBooking);
-router.get("/",auth(Role.CUSTOMER),)
+router.get("/", auth(Role.CUSTOMER), bookingController.getCustomerBookings);
+router.get("/:bookingId", auth(Role.CUSTOMER), bookingController.getSingleCustomerBooking);
 
 export const bookingRoutes = router;
