@@ -8,6 +8,7 @@ import { technicianRoutes } from "./modules/technician/technician.route";
 import { technicianPublicRoutes } from "./modules/technician/technician.public.route";
 import { categoryPublicRoutes } from "./modules/category/category.public.route";
 import { bookingRoutes } from "./modules/booking/booking.route";
+import { bookingTechnicianRoutes } from "./modules/booking/booking.technician.route";
 
 const app: Application = express()
 
@@ -29,5 +30,6 @@ app.use("/api/technician", technicianRoutes);
 app.use("/api/technicians", technicianPublicRoutes);
 app.use("/api/services", serviceRoutes);
 app.use("/api/bookings", bookingRoutes);
+app.use("/api/technician/bookings", bookingTechnicianRoutes);
 
 export default app;

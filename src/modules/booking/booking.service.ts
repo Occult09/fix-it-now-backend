@@ -75,8 +75,37 @@ const getSingleCustomerBookingFromDB = async (bookingId: string) => {
     return booking;
 }
 
+const getTechnicianBookingFromDB = async (userId: string) => {
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const technicianBookings = await prisma.booking.findMany({
+        where: {
+            technicianId: technician.id
+        },
+        include: {
+            service: true,
+            customer: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+
+    if(!technicianBookings){
+        throw new Error("No bookings found!")
+    }
+
+    return technicianBookings;
+}
+
 export const bookingService = {
     createBookingIntoDB,
     getCustomerBookingFromDB,
-    getSingleCustomerBookingFromDB
+    getSingleCustomerBookingFromDB,
+    getTechnicianBookingFromDB
 }
