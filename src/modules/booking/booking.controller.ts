@@ -55,10 +55,27 @@ const getTechnicianBookings = catchAsync(async (req: Request, res: Response, nex
 
     const result = await bookingService.getTechnicianBookingFromDB(userId);
 
-    sendResponse(res,{
+    sendResponse(res, {
         success: true,
         statusCode: httpStatus.OK,
         message: "Technician bookings retrieved successfully",
+        data: {
+            result
+        }
+    })
+})
+
+const updateBookingStatus = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const payload = req.body;
+    const { bookingId } = req.params;
+    const userId = req.user.id;
+
+    const result = await bookingService.updateBookingStatusIntoDB(payload, bookingId as string,userId);
+
+    sendResponse(res, {
+        success: true,
+        statusCode: httpStatus.OK,
+        message: "Booking status updated successfully",
         data: {
             result
         }
@@ -69,5 +86,6 @@ export const bookingController = {
     createBooking,
     getCustomerBookings,
     getSingleCustomerBooking,
-    getTechnicianBookings
+    getTechnicianBookings,
+    updateBookingStatus
 }

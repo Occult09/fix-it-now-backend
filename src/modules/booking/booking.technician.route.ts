@@ -6,5 +6,6 @@ import { bookingController } from "./booking.controller";
 const router = Router()
 
 router.get("/", auth(Role.TECHNICIAN),bookingController.getTechnicianBookings);
+router.patch("/bookingId", auth(Role.TECHNICIAN), bookingController.updateBookingStatus);
 
 export const bookingTechnicianRoutes = router;

@@ -1,5 +1,6 @@
+import { BookingStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma"
-import { ICreateBooking } from "./booking.interface"
+import { ICreateBooking, IUpdateBookingStatus } from "./booking.interface"
 
 const createBookingIntoDB = async (payload: ICreateBooking, customerId: string) => {
     const transactionResult = await prisma.$transaction(
@@ -96,16 +97,75 @@ const getTechnicianBookingFromDB = async (userId: string) => {
         }
     })
 
-    if(!technicianBookings){
+    if (!technicianBookings) {
         throw new Error("No bookings found!")
     }
 
     return technicianBookings;
 }
 
+const updateBookingStatusIntoDB = async (payload: IUpdateBookingStatus, bookingId: string, userId: string) => {
+    const { status } = payload;
+
+    const technician = await prisma.technicianProfile.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const booking = await prisma.booking.findUniqueOrThrow({
+        where: {
+            id: bookingId,
+            technicianId: technician.id
+        }
+    })
+
+    if(booking.status === BookingStatus.REQUESTED){
+        if(status !== BookingStatus.ACCEPTED && status !== BookingStatus.DECLINED){
+            throw new Error("Request booking can only be accepted or declined")
+        }
+    }
+
+    else if(booking.status === BookingStatus.ACCEPTED){
+        if(status !== BookingStatus.IN_PROGRESS){
+            throw new Error("Accepted booking status can only be in progress")
+        }
+    }
+
+    else if(booking.status === BookingStatus.IN_PROGRESS){
+        if(status !== BookingStatus.COMPLETED){
+            throw new Error("In progress booking can only be completed")
+        }
+    }
+
+    else{
+        throw new Error(`Booking can not be changed from ${status} status`)
+    }
+
+    const updatedBookingStatus = await prisma.booking.update({
+        where: {
+            id: bookingId
+        },
+        data: {
+            status
+        },
+        include: {
+            service: true,
+            customer: {
+                omit: {
+                    password: true
+                }
+            }
+        }
+    })
+
+    return updatedBookingStatus;
+}
+
 export const bookingService = {
     createBookingIntoDB,
     getCustomerBookingFromDB,
     getSingleCustomerBookingFromDB,
-    getTechnicianBookingFromDB
+    getTechnicianBookingFromDB,
+    updateBookingStatusIntoDB
 }
