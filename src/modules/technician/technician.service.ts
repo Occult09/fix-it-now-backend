@@ -108,6 +108,11 @@ const getAllTechniciansFromDB = async () => {
                 omit: {
                     password: true
                 }
+            },
+            booking: {
+                include: {
+                    review: true
+                }
             }
         }
     });
@@ -128,6 +133,11 @@ const getSingleTechnicianFromDB = async (technicianId: string) => {
             user: {
                 omit: {
                     password: true
+                }
+            },
+            booking: {
+                include: {
+                    review: true
                 }
             }
         }

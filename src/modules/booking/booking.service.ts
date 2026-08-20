@@ -23,8 +23,6 @@ const createBookingIntoDB = async (payload: ICreateBooking, customerId: string) 
                 throw new Error("Your account is blocked! Please contact an admin")
             }
 
-            // payment to be implemented
-
             const booking = await tx.booking.create({
                 data: {
                     serviceId,
@@ -51,7 +49,8 @@ const getCustomerBookingFromDB = async (customerId: string) => {
         },
         include: {
             service: true,
-            technician: true
+            technician: true,
+            review: true
         }
     })
 
@@ -69,7 +68,8 @@ const getSingleCustomerBookingFromDB = async (bookingId: string) => {
         },
         include: {
             service: true,
-            technician: true
+            technician: true,
+            review: true
         }
     })
 
@@ -93,7 +93,8 @@ const getTechnicianBookingFromDB = async (userId: string) => {
                 omit: {
                     password: true
                 }
-            }
+            },
+            review: true
         }
     })
 
@@ -155,7 +156,8 @@ const updateBookingStatusIntoDB = async (payload: IUpdateBookingStatus, bookingI
                 omit: {
                     password: true
                 }
-            }
+            },
+            review: true
         }
     })
 
