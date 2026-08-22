@@ -12,6 +12,7 @@ import { bookingTechnicianRoutes } from "./modules/booking/booking.technician.ro
 import { adminRoutes } from "./modules/admin/admin.route";
 import { reviewRoutes } from "./modules/review/review.route";
 import { notFound } from "./middlewares/notFound";
+import { globalErrorHandler } from "./middlewares/globalErrorHandler";
 
 const app: Application = express()
 
@@ -37,5 +38,6 @@ app.use("/api/technician/bookings", bookingTechnicianRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use(notFound);
+app.use(globalErrorHandler);
 
 export default app;
