@@ -24,7 +24,13 @@ const createCategoryIntoDB = async (payload: ICreateCategory) => {
 }
 
 const getCategoryFromDB = async () => {
-    const categories = await prisma.category.findMany()
+    const categories = await prisma.category.findMany({
+        where: {
+            AND: [
+
+            ]
+        }
+    })
 
     if(!categories){
         throw new Error("No category found!")
