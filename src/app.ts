@@ -11,6 +11,7 @@ import { bookingRoutes } from "./modules/booking/booking.route";
 import { bookingTechnicianRoutes } from "./modules/booking/booking.technician.route";
 import { adminRoutes } from "./modules/admin/admin.route";
 import { reviewRoutes } from "./modules/review/review.route";
+import { notFound } from "./middlewares/notFound";
 
 const app: Application = express()
 
@@ -35,5 +36,6 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/technician/bookings", bookingTechnicianRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use(notFound);
 
 export default app;
